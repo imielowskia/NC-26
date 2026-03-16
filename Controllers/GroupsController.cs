@@ -22,7 +22,7 @@ namespace NC_26.Controllers
         // GET: Groups
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Group.ToListAsync());
+            return View(await _context.Group.Include(g => g.Field).Include(g => g.Students).ToListAsync());
         }
 
         // GET: Groups/Details/5
@@ -34,6 +34,8 @@ namespace NC_26.Controllers
             }
 
             var @group = await _context.Group
+                .Include(g => g.Field)
+                .Include(g => g.Students)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@group == null)
             {
@@ -46,6 +48,7 @@ namespace NC_26.Controllers
         // GET: Groups/Create
         public IActionResult Create()
         {
+            ViewData["FieldId"] = new SelectList(_context.Field, "Id", "Name");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace NC_26.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Group @group)
+        public async Task<IActionResult> Create([Bind("Id,Name,FieldId")] Group @group)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace NC_26.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["FieldId"] = new SelectList(_context.Field, "Id", "Name", group.FieldId);
             return View(@group);
         }
 
@@ -78,6 +82,7 @@ namespace NC_26.Controllers
             {
                 return NotFound();
             }
+            ViewData["FieldId"] = new SelectList(_context.Field, "Id", "Name", group.FieldId);
             return View(@group);
         }
 
@@ -86,7 +91,7 @@ namespace NC_26.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Group @group)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,FieldId")] Group @group)
         {
             if (id != @group.Id)
             {
@@ -113,6 +118,7 @@ namespace NC_26.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["FieldId"] = new SelectList(_context.Field, "Id", "Name", group.FieldId);
             return View(@group);
         }
 
@@ -125,6 +131,8 @@ namespace NC_26.Controllers
             }
 
             var @group = await _context.Group
+                .Include(g => g.Field)
+                .Include(g => g.Students)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@group == null)
             {

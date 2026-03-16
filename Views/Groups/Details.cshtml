@@ -17,6 +17,29 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
     </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Field)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Field.Name)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Students)
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var student in Model.Students)
+                {
+                    <li>
+                        @student.IN
+                    </li>
+                }
+            </ul>
+        </dd>
+    </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |

@@ -22,7 +22,7 @@ namespace NC_26.Controllers
         // GET: Students
         public async Task<IActionResult> Index()
         {
-            var nC_26Context = _context.Student.Include(s => s.Group);
+            var nC_26Context = _context.Student.Include(s => s.Group).ThenInclude(g => g.Field); ;
             return View(await nC_26Context.ToListAsync());
         }
 
@@ -36,6 +36,7 @@ namespace NC_26.Controllers
 
             var student = await _context.Student
                 .Include(s => s.Group)
+                .ThenInclude(g => g.Field)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (student == null)
             {
@@ -132,6 +133,7 @@ namespace NC_26.Controllers
 
             var student = await _context.Student
                 .Include(s => s.Group)
+                .ThenInclude(g => g.Field)  
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (student == null)
             {
