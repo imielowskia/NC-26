@@ -15,6 +15,12 @@ namespace NC_26.Models
         [Display(Name = "Grupa")]
         public string? Name { get; set; }
 
+        [ForeignKey("FieldId")]
+        public int? FieldId { get; set; }
+
+        [Display(Name = "Kierunek")]
+        public Field? Field { get; set; }
+
         [Display(Name = "Studenci")]
         public virtual ICollection<Student>? Students { get; set; }
 

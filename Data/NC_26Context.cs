@@ -16,5 +16,6 @@ namespace NC_26.Data
 
         public DbSet<NC_26.Models.Group> Group { get; set; } = default!;
         public DbSet<NC_26.Models.Student> Student { get; set; } = default!;
+        public DbSet<NC_26.Models.Field> Field { get; set; } = default!;
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NC_26.Data;
 
@@ -11,9 +12,11 @@ using NC_26.Data;
 namespace NC_26.Migrations
 {
     [DbContext(typeof(NC_26Context))]
-    partial class NC_26ContextModelSnapshot : ModelSnapshot
+    [Migration("20260316181156_AddFields")]
+    partial class AddFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
