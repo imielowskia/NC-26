@@ -20,6 +20,9 @@ namespace NC_26.Models
 
         [Display(Name = "ECTS")]        
         [Range(1, 7)]
-        public int? ECTS { get; set; }        
+        public int? ECTS { get; set; }
+
+        [Display(Name = "Grupy")]
+        public virtual ICollection<Group>? Groups { get; set; }
     }
 }

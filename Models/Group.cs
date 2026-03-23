@@ -24,5 +24,8 @@ namespace NC_26.Models
         [Display(Name = "Studenci")]
         public virtual ICollection<Student>? Students { get; set; }
 
+        [Display(Name = "Przedmioty")]
+        public virtual ICollection<Course>? Courses { get; set; }
+
     }
 }

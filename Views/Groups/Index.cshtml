@@ -21,6 +21,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Students)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Courses)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -39,6 +42,16 @@
                         {
                             <li>
                                 @student.IN
+                            </li>
+                        }
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    @foreach (var course in item.Courses)
+                        {
+                            <li>
+                                @course.Name
                             </li>
                         }
                 </ul>
