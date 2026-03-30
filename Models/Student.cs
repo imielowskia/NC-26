@@ -38,6 +38,9 @@ namespace NC_26.Models
         [Display(Name = "Grupa")]
         public Group? Group { get; set; }
 
+        [Display(Name = "Oceny")]
+        public ICollection<Grade>? Grades { get; set; }
+
         public string IN
         {
             get

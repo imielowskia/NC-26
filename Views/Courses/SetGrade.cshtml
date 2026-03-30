@@ -1,0 +1,23 @@
+﻿@model NC_26.Models.Course
+@{
+    ViewData["Title"] = "Oceny";
+}
+<h1>Oceny </h1>
+<h2> @Model.Name dla grupy: @ViewBag.group.Name</h2>
+<form asp-action="SetGrade">
+
+    @foreach (var student in ViewBag.gradelist)
+    {
+        <input type="hidden" name="ids" value="@student.StudentId" />
+        <div class="row border-bottom-0 bg-gradient-primary">
+            <div class="col-2">@student.IN</div>
+            <div class="col-2">
+                <input name="oceny" value="@student.Ocena" class="form-control" />
+            </div>
+        </div>
+    }
+    <input type="hidden" name="groupid" value="@ViewBag.group.Id" />
+    <div class="form-group">
+        <input type="submit" value="Zapisz" class="btn btn-primary btn-sm" />
+    </div>
+</form>

@@ -24,5 +24,8 @@ namespace NC_26.Models
 
         [Display(Name = "Grupy")]
         public virtual ICollection<Group>? Groups { get; set; }
+
+        [Display(Name = "Oceny")]
+        public ICollection<Grade>? Grades { get; set; }
     }
 }

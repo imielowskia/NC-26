@@ -42,6 +42,26 @@
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
-}
+
+            <tr>
+                <td></td>
+                <td colspan="3">
+                    <table class="table table-sm table-secondary">
+                        @foreach (var g in item.Groups)
+                        {
+                            <tr>
+                                <td>
+                                    @g.Name
+                                </td>
+                                <td>
+                                    <a asp-action="Grade" asp-route-id="@item.Id" asp-route-groupid="@g.Id" class="btn btn-sm btn-primary">Oceny</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+
+        }
     </tbody>
 </table>
