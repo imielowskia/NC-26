@@ -62,6 +62,17 @@
                 <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Delete</a>
             </td>
         </tr>
+        @foreach (var course in item.Courses)
+        {
+                <tr>
+                    <td></td>
+                    <td>@course.Name</td>
+                    <td>
+                        <a asp-action="Attendance" asp-route-id="@item.Id" asp-route-courseid="@course.Id" class="btn btn-sm btn-primary">Obecności</a>
+                    </td>
+                    <td></td>
+                </tr>
+        }
 }
     </tbody>
 </table>

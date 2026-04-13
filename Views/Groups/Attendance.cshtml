@@ -1,0 +1,38 @@
+﻿@model NC_26.Models.Group
+
+
+<h2>Grupa: @Html.DisplayFor(model => model.Name)</h2>
+<h3>Listy obecności z @ViewBag.course.Name </h3>
+
+<a asp-action="Index" class="btn btn-sm btn-primary">Powrót do listy grup</a>
+
+<table class="table table-sm">
+    <thead>
+    <th>Student</th>
+    @foreach (var d in ViewBag.daty)
+    {
+        <th>@d</th>
+    }
+    </thead>
+    <tbody>
+        @foreach (var st in ViewBag.attnlist)
+        {
+            <tr>
+                <td>@st.Student.IN</td>
+                @foreach (var d in ViewBag.daty)
+                {
+                    if (st.Daty.Contains(d))
+                    {
+                        <td><b>X</b></td>
+                    }
+                    else
+                    {
+                        <td><b>-</b></td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="GetAttn" asp-route-id="@Model.Id" asp-route-courseid="@ViewBag.course.Id" class="btn btn-sm btn-primary">Nowa lista</a>

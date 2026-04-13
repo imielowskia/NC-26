@@ -135,6 +135,61 @@ namespace NC_26.Controllers
             return View(@group);
         }
 
+
+        //GET: Group/5/Attendance/5
+        [Route("Group/{id}/Attendance/{courseid}")]
+        public async Task<IActionResult> Attendance(int id, int courseid)
+        {
+            var @course = _context.Course.Single(c => c.Id == courseid);
+            var @group = _context.Group.Include(g => g.Students).Single(g => g.Id == id);
+            ViewData["attnlist"] = GetAttnList(@group, @course);
+            ViewData["course"] = @course;
+            return View(@group);
+        }
+
+        //GET: Group/5/GetAttn/5
+        [Route("Group/{id}/GetAttn/{courseid}")]
+        public async Task<IActionResult> GetAttn(int id, int courseid)
+        {
+            var @course = _context.Course.Single(c => c.Id == courseid);
+            var @group = _context.Group.Include(g => g.Students).Single(g => g.Id == id);
+            ViewData["attnlist"] = GetAttnList(@group, @course);
+            ViewData["course"] = @course;
+            ViewData["data"] = DateTime.Now.ToString("yyyy-MM-dd");
+            return View(@group);
+        }
+
+
+        // POST: Group/5/GetAttn/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Group/{id}/GetAttn/{courseid}")]
+        public async Task<IActionResult> GetAttn(int id)
+        {
+            var courseid = int.Parse(HttpContext.Request.Form["courseid"]);
+            var data = DateOnly.Parse(HttpContext.Request.Form["data"]);
+            var present = HttpContext.Request.Form["present"];
+            foreach (var sid in present)
+            {
+                var xid = int.Parse(sid);
+                var attn = new Attendance()
+                {
+                    CourseId = courseid,
+                    StudentId = xid,
+                    Data = data
+                };
+                _context.Add(attn);
+            }
+            await _context.SaveChangesAsync();
+            var @group = _context.Group.Include(g => g.Students).Single(g => g.Id == id);
+            var @course = _context.Course.Single(c => c.Id == courseid);
+            ViewData["attnlist"] = GetAttnList(@group, @course);
+            ViewData["course"] = @course;
+            ViewData["data"] = DateTime.Now;
+            return View("Attendance", @group);
+        }
+
+
         // GET: Groups/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -197,6 +252,38 @@ namespace NC_26.Controllers
                    );
             }
             ViewData["courses"] = coursestocheck;
+        }
+
+        private List<AttnList> GetAttnList(Group group, Course course)
+        {
+            var attnlist = new List<AttnList>();
+            var students = group.Students;
+            var @daty = new List<DateOnly>();
+            var attnd = _context.Attendance.Where(a => a.CourseId == course.Id).OrderBy(a => a.Data).ToList();
+            var i = 0;
+            foreach (var student in students)
+            {
+                var stud_attn = attnd.Where(a => a.StudentId == student.Id).ToList();
+                attnlist.Add(
+                        new AttnList
+                        {
+                            Student = student,
+                            Daty = []
+                        }
+                        );
+                foreach (var sa in stud_attn)
+                {
+                    if (!@daty.Contains(sa.Data))
+                    {
+                        @daty.Add(sa.Data);
+                    }
+                    attnlist[i].Daty.Add(sa.Data);
+                }
+                i++;
+            }
+
+            ViewData["daty"] = @daty.Order();
+            return attnlist;
         }
 
     }

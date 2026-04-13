@@ -1,0 +1,63 @@
+﻿@model NC_26.Models.Group
+
+
+<h2>Grupa: @Html.DisplayFor(model => model.Name)</h2>
+<h3>Listy obecności z @ViewBag.course.Name </h3>
+
+
+<table class="table table-sm">
+    <thead>
+    <th>Student</th>
+    @foreach (var d in ViewBag.daty)
+    {
+        <th>@d</th>
+    }
+    </thead>
+    <tbody>
+        @foreach (var st in ViewBag.attnlist)
+        {
+            <tr>
+                <td>@st.Student.IN</td>
+                @foreach (var d in ViewBag.daty)
+                {
+                    if (st.Daty.Contains(d))
+                    {
+                        <td><b>X</b></td>
+                    }
+                    else
+                    {
+                        <td><b>-</b></td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+<form asp-action="GetAttn">
+    <input type="hidden" name="groupid" value="@Model.Id" />
+    <input type="hidden" name="courseid" value="@ViewBag.course.Id" />
+    <table class="table table-sm">
+        <thead>
+        <th>Student</th>
+        <th><input type="date" name="data" value="@ViewBag.data" /></th>
+        </thead>
+        <tbody>
+            @foreach (var st in ViewBag.attnlist)
+            {
+                <input type="hidden" name="ids" value="@st.Student.Id" />
+                <tr>
+                    <td>@st.Student.IN </td>
+                    <td><input type="checkbox" name="present" value="@st.Student.Id" /> </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <div class="form-group">
+        <input type="submit" value="Zapisz" class="btn btn-primary btn-sm" />
+    </div>
+</form>
