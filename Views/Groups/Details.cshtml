@@ -4,20 +4,18 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Details - @DateTime.Now.ToString("HH:mm:ss") </h1>
 
 <div>
     <h4>Group</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-    </dl>
-    <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Field)
         </dt>
@@ -48,14 +46,19 @@
             <ul>
                 @foreach (var course in Model.Courses)
                 {
-                    <li>
-                        @course.Name
-                    </li>
+                    if (ViewBag.courseid != course.Id)
+                    {
+                        @await Component.InvokeAsync("Attendance", new { id = Model.Id, courseid = course.Id })
+                    }
+                    else
+                    {
+                        @await Component.InvokeAsync("Attendance", new { id = Model.Id, courseid = course.Id, typ = ViewBag.typ })
+                    }
+                    <hr />
                 }
             </ul>
         </dd>
     </dl>
-
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>

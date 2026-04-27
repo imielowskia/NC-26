@@ -26,7 +26,7 @@ namespace NC_26.Controllers
         }
 
         // GET: Groups/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? courseid, string typ = "")
         {
             if (id == null)
             {
@@ -42,7 +42,11 @@ namespace NC_26.Controllers
             {
                 return NotFound();
             }
-
+            if (courseid != null)
+            {
+                ViewData["courseid"] = courseid;
+            }
+            ViewData["typ"] = typ;
             return View(@group);
         }
 
@@ -188,6 +192,46 @@ namespace NC_26.Controllers
             ViewData["data"] = DateTime.Now;
             return View("Attendance", @group);
         }
+
+
+
+        // Obsługa zapisu z viewcomponent
+        // POST: Group/5/AttnSave/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Group/AttnSave")]
+        public async Task<IActionResult> AttnSave()
+        {
+            var courseid = int.Parse(HttpContext.Request.Form["courseid"]);
+            var groupid = int.Parse(HttpContext.Request.Form["groupid"]);
+            var data = DateOnly.Parse(HttpContext.Request.Form["data"]);
+            var present = HttpContext.Request.Form["present"];
+            foreach (var sid in present)
+            {
+                var xid = int.Parse(sid);
+                var attn = new Attendance()
+                {
+                    CourseId = courseid,
+                    StudentId = xid,
+                    Data = data
+                };
+                _context.Add(attn);
+            }
+            await _context.SaveChangesAsync();
+            var @group = _context.Group.Include(g => g.Students).Include(g => g.Courses).Single(g => g.Id == groupid);
+            var @course = _context.Course.Single(c => c.Id == courseid);
+            ViewData["attnlist"] = GetAttnList(@group, @course);
+            ViewData["course"] = @course;
+            ViewData["group"] = group;
+            ViewData["data"] = DateTime.Now;
+            ViewData["typ"] = "show";
+            ViewData["courseid"] = @course.Id;
+            return View("Details", group);
+        }
+
+
+
+
 
 
         // GET: Groups/Delete/5
